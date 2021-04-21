@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { OwnerService } from '../shared/owner/owner.service';
-import { GiphyService } from '../shared/giphy/giphy.service';
 
 
 @Component({
@@ -11,7 +10,7 @@ import { GiphyService } from '../shared/giphy/giphy.service';
 export class OwnerListComponent implements OnInit {
   owners: Array<any>; //Creacion del Array de owners
 
-  constructor(private ownerService: OwnerService, private giphyService: GiphyService) { }
+  constructor(private ownerService: OwnerService) { }
 
   ngOnInit() {
     this.ownerService.getAll().subscribe(data => {
@@ -19,5 +18,4 @@ export class OwnerListComponent implements OnInit {
       console.log(this.owners);
     });
   }
-
 }
