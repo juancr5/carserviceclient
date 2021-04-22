@@ -1,24 +1,24 @@
-<mat-card>
-    <mat-card-title>Owner List</mat-card-title>
-    
-    <mat-card-content>
-      <mat-selection-list #list [(ngModel)]="selectedOptions" (ngModelChange)="getSelectedOwners($event)">
-        <mat-list-option *ngFor="let owner of owners" [value] = "owner.dni">
-            <h3 mat-line>
-              <a mat-raised-button color="warn" [routerLink]="['/owner-edit', owner.dni]">{{owner.name}}</a>
-              </h3>
-              <mat-divider></mat-divider>
-        </mat-list-option>
-      </mat-selection-list>
-      <p *ngIf="selectedOptions">
-        Owners selected: {{selectedOptions}}
-      </p>
-      <p style= "color:red; font-size: 20px;"  *ngIf="message">{{message}}</p>
-    </mat-card-content>
-    
-     <!--Botones de Accion-->
-     <mat-card-actions>
-      <button mat-fab color="primary" [routerLink]="'/owner-add'">Add</button>
-      <button mat-fab color="primary"  (click)="removeListOfOwners()"*ngIf="selectedOptions">Delete</button>
-    </mat-card-actions>
-  </mat-card>
+<h2>Owner List</h2>
+
+<div>
+    <div class="container" *ngFor="let owner of owners; let i = index">
+        <div *ngIf="owner.visible">
+            <a [routerLink]="['/owner-edit', owner.dni ]">
+                <mat-card class="card">
+                    <mat-card-title> {{owner.name}}</mat-card-title>
+                    <mat-card-subtitle> {{owner.dni}}</mat-card-subtitle>
+                    <mat-card-content> {{owner.profession}}</mat-card-content>
+                </mat-card>
+            </a>
+        </div>
+        <div *ngIf="owner.visible">
+            <mat-checkbox [(ngModel)]="owner.checked" (change)="changeCheckBoxEvent($event, i)"></mat-checkbox>
+        </div>
+    </div>
+</div>
+<br>
+
+<mat-card-actions>
+<button mat-fab color="primary" class="fab-button" [routerLink]="['/owner-add']">Add</button>
+<button mat-fab color="warn"  class = "fab-button" *ngIf="indexOwners.size" (click)="deleteOwners()">Delete</button>
+</mat-card-actions>

@@ -1,2 +1,16 @@
-/*Sin CSS*/
-    
+a {
+    text-decoration: none;
+}
+
+.card {
+    width: 190vh;
+    height: 11vh;
+}
+
+.container {
+    display: flex;
+}
+
+.fab-button {
+    margin: 1rem;
+}

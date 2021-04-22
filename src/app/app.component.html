@@ -1,5 +1,16 @@
 <mat-toolbar color="primary">
-  <span>Welcome to {{title}}!</span>
+    <div>
+      <span>Welcome to {{title}}!</span>
+    </div>
+    <div class="end">
+      <ul fxLayout fxLayoutGap="15px" class="navigation-items">
+        <li>
+          <a routerLink="/car-list">Cars Actions</a>
+        </li>
+        <li>
+          <a routerLink="/owner-list">Owner Actions</a>
+        </li>
+      </ul>
+    </div>
 </mat-toolbar>
-
 <router-outlet></router-outlet>

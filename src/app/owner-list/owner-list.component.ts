@@ -1,67 +1,55 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { OwnerService } from '../shared/owner/owner.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CarService } from  '../shared/car/car.service';
 
 @Component({
   selector: 'app-owner-list',
   templateUrl: './owner-list.component.html',
   styleUrls: ['./owner-list.component.css']
 })
-
 export class OwnerListComponent implements OnInit {
+
   owners = [];
-  selectedOwners = [];
-  message : any;
+  indexOwners = new Map();
 
-  constructor(private ownerService: OwnerService, private carService : CarService, private router: Router, 
-    private route: ActivatedRoute) { 
+  constructor(private ownerService: OwnerService) { }
 
-    }
-    
   ngOnInit() {
-    this.getOwners()
-  }
-
-  // Obtener los Owners  
-  getOwners() {
-    this.ownerService.getAll().subscribe( data => {
+    this.ownerService.getAllOwners().subscribe(data => {
       this.owners = data._embedded.owners;
-    })
-  }
 
-  getSelectedOwners($event: any[]){
-    this.selectedOwners = $event;
-  }
-
-  
-  removeOwnersFromArray() {
-    for (var i=0; i < this.selectedOwners.length; i++){
-      for (var j=0; j < this.owners.length; j++){
-        if (this.owners[j].dni == this.selectedOwners[i]){
-          this.owners.splice(j, 1)
-        }
+      for (const owner of this.owners) {
+        owner.href = owner._links.owner.href;
+        owner.checked = false;
+        owner.visible = true;
       }
+    },
+      error => {
+        console.log('No se puede traer los Owners');
+      });
+  }
+
+  changeCheckBoxEvent(event, index) {
+    if (event.checked === true) {
+      this.indexOwners.set(index, index);
+    } else {
+      this.indexOwners.delete(index);
     }
   }
 
-  updateCars(){
-    this.carService.removeOwners(this.selectedOwners);
-  }
+  deleteOwners() {
+    this.indexOwners.forEach(key => {
 
-  removeOwners(){
-    this.ownerService.removeList(this.selectedOwners);
-  }
+      const owner = this.owners[key];
 
-  removeListOfOwners(){
-   if (this.selectedOwners[0]){
-    this.updateCars();
-    this.removeOwners();
-    this.removeOwnersFromArray();
-    this.message = "Owners Deleted Succesfully"
-   } else {
-     this.message = "There are no owners to delete";
-   }
-  }
+      this.ownerService.removeRelation(owner.dni);
 
+      this.ownerService.deleteOwnerByHref(owner.href).subscribe(result => {
+        console.log("Owner elimando con éxito");
+        this.indexOwners.delete(key);
+        owner.checked = false;
+        owner.visible = false;
+      },
+        error => console.log("No se puede elimnar el owner"));
+    });
+  }
 }
