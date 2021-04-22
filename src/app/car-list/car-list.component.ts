@@ -13,6 +13,7 @@ export class CarListComponent implements OnInit {
   constructor(private carService: CarService, private giphyService: GiphyService) { }
 
   ngOnInit() {
+    // Inicializa el metodo get all el cual llama todos los carros de la Api
     this.carService.getAll().subscribe(data => {
       this.cars = data;
       for (const car of this.cars) {

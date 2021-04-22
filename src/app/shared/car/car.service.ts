@@ -4,16 +4,21 @@ import { Observable } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class CarService {
+  removeOwners(selectedOwners: any[]) {
+    throw new Error('Method not implemented.');
+  }
   public API = '//thawing-chamber-47973.herokuapp.com';
   public CAR_API = this.API + '/cars';
 
   constructor(private http: HttpClient) {
   }
 
+  // Retorna toda la lista de carros 
   getAll(): Observable<any> {
     return this.http.get(this.API + '/cool-cars');
   }
 
+  // Retorna toda la lista de carros por un id especifico
   get(id: string) {
     return this.http.get(this.CAR_API + '/'+ id);
   }

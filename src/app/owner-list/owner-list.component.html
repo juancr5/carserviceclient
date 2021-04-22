@@ -1,15 +1,24 @@
 <mat-card>
-    <mat-card-title>Car List</mat-card-title>
+    <mat-card-title>Owner List</mat-card-title>
+    
     <mat-card-content>
-      <mat-list>
-        <mat-list-item *ngFor="let car of cars">
-          <img mat-list-avatar src="{{car.giphyUrl}}" alt="{{car.name}}">
-          <h3 mat-line>
-            <a mat-button [routerLink]="['/owner-edit', car.id]">{{car.name}}</a>
-          </h3>
-        </mat-list-item>
-      </mat-list>
+      <mat-selection-list #list [(ngModel)]="selectedOptions" (ngModelChange)="getSelectedOwners($event)">
+        <mat-list-option *ngFor="let owner of owners" [value] = "owner.dni">
+            <h3 mat-line>
+              <a mat-raised-button color="warn" [routerLink]="['/owner-edit', owner.dni]">{{owner.name}}</a>
+              </h3>
+              <mat-divider></mat-divider>
+        </mat-list-option>
+      </mat-selection-list>
+      <p *ngIf="selectedOptions">
+        Owners selected: {{selectedOptions}}
+      </p>
+      <p style= "color:red; font-size: 20px;"  *ngIf="message">{{message}}</p>
     </mat-card-content>
-  
-    <button mat-fab color="primary" [routerLink]="['/car-add']">Add</button>
+    
+     <!--Botones de Accion-->
+     <mat-card-actions>
+      <button mat-fab color="primary" [routerLink]="'/owner-add'">Add</button>
+      <button mat-fab color="primary"  (click)="removeListOfOwners()"*ngIf="selectedOptions">Delete</button>
+    </mat-card-actions>
   </mat-card>
