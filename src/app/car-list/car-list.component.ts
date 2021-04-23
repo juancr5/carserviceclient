@@ -1,32 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import { CarService } from '../shared/car/car.service';
-import { GiphyService } from '../shared/giphy/giphy.service';
-import { OwnerService } from '../shared/owner/owner.service'
+import { Component, OnInit } from "@angular/core";
+import { CarService } from "../shared/car/car.service";
+import { GiphyService } from "../shared/giphy/giphy.service";
+import { OwnerService } from '../shared/owner/owner.service';
 
 @Component({
-  selector: 'app-car-list',
-  templateUrl: './car-list.component.html',
-  styleUrls: ['./car-list.component.css']
+  selector: "app-car-list",
+  templateUrl: "./car-list.component.html",
+  styleUrls: ["./car-list.component.css"],
 })
 export class CarListComponent implements OnInit {
   cars: Array<any>;
 
-  constructor(private carService: CarService, private giphyService: GiphyService,
-    private ownerService: OwnerService) { }
+  constructor(
+    private carService: CarService,
+    private giphyService: GiphyService,
+    private ownerService:OwnerService
+  ) {}
 
   ngOnInit() {
-    this.carService.getAll().subscribe(data => {
-      this.cars = data;
+    this.carService.getAll().subscribe((res) => {
+      this.cars = res._embedded.cars;
       for (const car of this.cars) {
-        this.giphyService.get(car.name).subscribe(url => car.giphyUrl = url);
-        this.ownerService.getOwnerByDni(car.ownerDni).subscribe(data => {
-          if(data._embedded.owners[0]) {
-            car.ownerName = data._embedded.owners[0].name;
+        car.id = car._links.self.href.split("/")[4];
+        this.giphyService.get(car.name).subscribe((url) => (car.giphyUrl = url));
+          if(car.ownerDni != null){ 
+            this.ownerService.getOwner(car.ownerDni).subscribe((resp:any) => {
+              if(resp._embedded.owners.length!){
+                car.ownerName = resp._embedded.owners[0].name;
+              }
+              else{
+                car.ownerName = "No owner registered";
+              }
+            });
           }
-        }, error => {
-          console.log("No se puede traer el owner");
-        });
       }
+      console.log(this.cars);
     });
+    
   }
+
 }

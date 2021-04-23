@@ -3,9 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CarService } from '../car/car.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
 export class OwnerService {
 
   public API = 'https://thawing-chamber-47973.herokuapp.com/owners';
@@ -19,7 +17,7 @@ export class OwnerService {
     return this.http.get<any>(this.API);
   }
 
-  getOwnerByDni(dni) : Observable<any> {
+  getOwner(dni) : Observable<any> {
     const newAPI = this.API_SEARCH + dni;
     return this.http.get<any>(newAPI);
   }

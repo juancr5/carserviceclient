@@ -24,7 +24,7 @@ export class OwnerEditComponent implements OnInit {
       const idOwner = params['id'];
 
       if (idOwner) {
-        this.ownerService.getOwnerByDni(idOwner).subscribe(data => {
+        this.ownerService.getOwner(idOwner).subscribe(data => {
           if (data._embedded.owners[0]) {
             this.owners = data._embedded.owners;
 
@@ -48,6 +48,7 @@ export class OwnerEditComponent implements OnInit {
   saveOwner(form: NgForm) {
     this.ownerService.saveOwner(form).subscribe(result => {
       console.log('Owner creado con éxito');
+      alert("Owner creado con éxito");
 
       if (this.owners.length === 1) {
         this.gotoList();

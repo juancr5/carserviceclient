@@ -10,12 +10,10 @@ export class CarService {
   constructor(private http: HttpClient) {
   }
 
-  // Obtener la Lista de Carros Total
   getAll(): Observable<any> {
-    return this.http.get(this.API + '/cool-cars');
+    return this.http.get(this.API + '/cars');
   }
 
-   // Obtener la Lista de Carros por Id EEpecifico
   get(id: string) {
     return this.http.get(this.CAR_API + '/' + id);
   }
